@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: dim_customer
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+  - name: dim_service
+    columns:
+      - name: service_code
+        data_tests: [unique, not_null]
+  - name: dim_date
+    columns:
+      - name: date_day
+        data_tests: [unique, not_null]
+  - name: fct_shipments
+    columns:
+      - name: shipment_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_id
+      - name: service_code
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_service')
+                field: service_code
+  - name: fct_invoices
+    columns:
+      - name: invoice_id
+        data_tests: [unique, not_null]
+  - name: mart_customer_profitability
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [customer_id, month_start]

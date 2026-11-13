@@ -1,0 +1,1 @@
+select * from "sales_finance"."analytics_intermediate"."int_invoices_checked"
