@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: One row per customer (duplicates from the raw CRM export removed).
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_crm_opportunities
+    columns:
+      - name: opportunity_id
+        data_tests: [unique, not_null]
+  - name: stg_contracts
+    columns:
+      - name: contract_id
+        data_tests: [unique, not_null]
+  - name: stg_shipments
+    columns:
+      - name: shipment_id
+        data_tests: [unique, not_null]
+  - name: stg_shipment_costs
+    columns:
+      - name: shipment_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shipments')
+                field: shipment_id
+  - name: stg_invoices
+    columns:
+      - name: invoice_id
+        data_tests: [unique, not_null]

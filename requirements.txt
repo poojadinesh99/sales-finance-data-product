@@ -1,0 +1,4 @@
+dbt-snowflake
+faker
+pandas
+snowflake-connector-python[pandas]
