@@ -11,10 +11,12 @@ so the tests catch realistic problems.
 
 ## Architecture
 
+
+~~~text
 Python generator → DuckDB raw → dbt staging → intermediate → marts (star schema)
-│ │
-source tests business-rule tests
-└──────→ monitoring.dq_results ←┘
+                                    │                              │
+                              source tests               business-rule tests
+                                    └──────→ monitoring.dq_results ←┘
 
 
 ## Data model
