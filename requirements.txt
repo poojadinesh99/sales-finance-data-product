@@ -1,4 +1,5 @@
-dbt-snowflake
+dbt-core==1.12.7
+dbt-duckdb
 faker
 pandas
-snowflake-connector-python[pandas]
+duckdb

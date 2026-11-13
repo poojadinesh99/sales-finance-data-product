@@ -1,0 +1,44 @@
+name: dbt CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create dbt profile (DuckDB, no secrets needed)
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml <<'PROFILE'
+          sales_finance:
+            target: dev
+            outputs:
+              dev:
+                type: duckdb
+                path: sales_finance.duckdb
+                schema: analytics
+                threads: 4
+          PROFILE
+
+      - name: Generate synthetic raw data
+        run: python data_generator/generate_data.py
+
+      - name: dbt build (models + data quality tests)
+        run: |
+          dbt deps
+          dbt build
+
+      - name: Store DQ results
+        run: python monitoring/collect_dq_results.py
